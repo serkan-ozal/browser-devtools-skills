@@ -1,3 +1,9 @@
+---
+name: api-testing
+description: Test API integrations by mocking responses, intercepting requests, and monitoring network traffic. Use when the user wants to mock backend APIs, simulate errors, test offline behavior, intercept requests, or add authentication headers.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # API Testing Skill
 
 Test API integrations by mocking responses, intercepting requests, and monitoring network traffic.

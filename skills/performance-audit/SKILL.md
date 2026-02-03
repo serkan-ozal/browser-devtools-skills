@@ -1,3 +1,9 @@
+---
+name: performance-audit
+description: Analyze web page performance using Web Vitals and network timing metrics. Use when the user asks about page performance, load times, Core Web Vitals (LCP, CLS, INP), slow pages, or SEO performance factors.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # Performance Audit Skill
 
 Analyze web page performance using Web Vitals and network timing metrics.

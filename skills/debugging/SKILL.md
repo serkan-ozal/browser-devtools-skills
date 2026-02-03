@@ -1,3 +1,9 @@
+---
+name: debugging
+description: Debug web applications using console inspection, network analysis, and non-blocking code debugging. Use when the user reports bugs, wants to debug JavaScript, inspect network requests, troubleshoot page issues, trace function calls, or monitor exceptions.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # Debugging Skill
 
 Debug web applications using console inspection, network analysis, and non-blocking code debugging with tracepoints, logpoints, and exception monitoring.

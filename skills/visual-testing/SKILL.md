@@ -1,3 +1,9 @@
+---
+name: visual-testing
+description: Visual testing, UI verification, and design comparison using screenshots and Figma integration. Use when the user wants to verify UI appearance, compare with Figma designs, test responsive layouts, check for visual regressions, or validate design implementation.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # Visual Testing Skill
 
 Perform visual testing, UI verification, and design comparison using screenshots, responsive testing, and Figma integration.

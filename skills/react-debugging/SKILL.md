@@ -1,3 +1,9 @@
+---
+name: react-debugging
+description: Debug React applications by inspecting components, props, and the component tree. Use when the user is debugging React apps, wants to inspect component props/state, find which component renders an element, or understand the React component hierarchy.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # React Debugging Skill
 
 Debug React applications by inspecting components, props, and the component tree.

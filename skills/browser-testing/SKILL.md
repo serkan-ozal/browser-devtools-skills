@@ -1,3 +1,9 @@
+---
+name: browser-testing
+description: Automated browser testing, interaction automation, and form testing. Use when the user needs to test web pages, automate browser interactions, fill forms, test validation, run multi-step wizards, or test login/signup flows.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # Browser Testing Skill
 
 Automated browser testing, interaction automation, and form testing using Browser DevTools CLI.

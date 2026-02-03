@@ -1,3 +1,9 @@
+---
+name: accessibility-audit
+description: Audit web accessibility using ARIA snapshots, AX tree analysis, and WCAG validation. Use when the user asks about accessibility, a11y, WCAG compliance, screen reader compatibility, ARIA roles, or keyboard navigation.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # Accessibility Audit Skill
 
 Audit web accessibility using ARIA snapshots, AX tree analysis, and WCAG validation.

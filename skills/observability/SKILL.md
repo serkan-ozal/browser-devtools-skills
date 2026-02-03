@@ -1,3 +1,9 @@
+---
+name: observability
+description: Monitor and debug web applications using OpenTelemetry, console logs, network requests, and distributed tracing. Use when the user asks about distributed tracing, correlating frontend/backend requests, OpenTelemetry, Jaeger, or monitoring application behavior.
+allowed-tools: Bash(browser-devtools-cli:*)
+---
+
 # Observability Skill
 
 Monitor and debug web applications using OpenTelemetry, console logs, network requests, and distributed tracing.
