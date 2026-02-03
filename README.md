@@ -7,7 +7,7 @@ Skills for [Browser DevTools MCP](https://github.com/serkan-ozal/browser-devtool
 Install browser automation capabilities as a skill for AI coding agents (Claude Code, Cursor, Windsurf, etc.) using the [skills.sh](https://skills.sh) ecosystem:
 
 ```bash
-npx skills add browser-devtools/browser-devtools-skills
+npx skills add serkan-ozal/browser-devtools-skills
 ```
 
 ## Available Skills
