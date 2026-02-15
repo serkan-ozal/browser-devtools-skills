@@ -1,7 +1,7 @@
 ---
 name: api-testing
 description: Test API integrations by mocking responses, intercepting requests, and monitoring network traffic. Use when the user wants to mock backend APIs, simulate errors, test offline behavior, intercept requests, or add authentication headers.
-allowed-tools: Bash(browser-devtools-cli:*)
+allowed-tools: Bash(browser-devtools-cli:*), Bash(node-devtools-cli:*)
 ---
 
 # API Testing Skill
@@ -178,6 +178,26 @@ browser-devtools-cli $SESSION content get-as-text --selector ".error-message"
 # Cleanup
 browser-devtools-cli $SESSION stub clear --all
 browser-devtools-cli session delete error-test
+```
+
+## Debugging Backend During API Tests
+
+When testing against a real backend and need to debug why an endpoint fails or returns unexpected data, use `node-devtools-cli`:
+
+```bash
+# Connect to API server process
+node-devtools-cli --session-id api-debug debug connect --process-name "api"
+
+# Set tracepoint on the handler
+node-devtools-cli --session-id api-debug debug put-tracepoint \
+  --url-pattern "routes/users.ts" \
+  --line-number 42
+
+# Trigger the API from browser (or curl), then get snapshots
+node-devtools-cli --session-id api-debug --json debug get-tracepoint-snapshots
+
+# Or inspect backend console logs
+node-devtools-cli --session-id api-debug --json debug get-logs --search "error"
 ```
 
 ## Best Practices

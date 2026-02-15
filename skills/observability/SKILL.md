@@ -1,12 +1,12 @@
 ---
 name: observability
-description: Monitor and debug web applications using OpenTelemetry, console logs, network requests, and distributed tracing. Use when the user asks about distributed tracing, correlating frontend/backend requests, OpenTelemetry, Jaeger, or monitoring application behavior.
-allowed-tools: Bash(browser-devtools-cli:*)
+description: Monitor and debug web and Node.js applications using OpenTelemetry, console logs, network requests, and distributed tracing. Use when the user asks about distributed tracing, correlating frontend/backend requests, OpenTelemetry, Jaeger, or monitoring application behavior.
+allowed-tools: Bash(browser-devtools-cli:*), Bash(node-devtools-cli:*)
 ---
 
 # Observability Skill
 
-Monitor and debug web applications using OpenTelemetry, console logs, network requests, and distributed tracing.
+Monitor and debug web and Node.js applications using OpenTelemetry, console logs, network requests, and distributed tracing.
 
 ## When to Use
 
@@ -74,6 +74,24 @@ Backend Service
 Observability Platform
     │
     └─► Full trace visualization
+```
+
+### Backend Observability (node-devtools-cli)
+
+When correlating frontend traces with backend behavior, use `node-devtools-cli` to inspect Node.js processes:
+
+```bash
+# Connect to backend
+node-devtools-cli --session-id backend debug connect --pid 12345
+
+# Get console logs from Node process (can correlate with trace ID in logs)
+node-devtools-cli --session-id backend --json debug get-logs
+node-devtools-cli --session-id backend --json debug get-logs --search "trace"
+
+# Optional: set tracepoints on backend handlers to capture call context
+node-devtools-cli --session-id backend debug put-tracepoint \
+  --url-pattern "routes/api.ts" \
+  --line-number 25
 ```
 
 ## Debugging Workflow

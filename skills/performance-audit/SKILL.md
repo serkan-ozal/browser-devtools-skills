@@ -1,7 +1,7 @@
 ---
 name: performance-audit
-description: Analyze web page performance using Web Vitals and network timing metrics. Use when the user asks about page performance, load times, Core Web Vitals (LCP, CLS, INP), slow pages, or SEO performance factors.
-allowed-tools: Bash(browser-devtools-cli:*)
+description: Analyze web and backend performance using Web Vitals, network timing, and Node.js metrics. Use when the user asks about page performance, load times, Core Web Vitals (LCP, CLS, INP), slow pages, backend bottlenecks, or SEO performance factors.
+allowed-tools: Bash(browser-devtools-cli:*), Bash(node-devtools-cli:*)
 ---
 
 # Performance Audit Skill
@@ -13,8 +13,9 @@ Analyze web page performance using Web Vitals and network timing metrics.
 This skill activates when:
 - User asks about page performance or speed
 - User wants to optimize load times
-- User mentions slow page or poor user experience
+- User mentions slow page, slow API, or poor user experience
 - User needs Core Web Vitals metrics
+- User asks about backend bottlenecks or TTFB
 - User asks about SEO performance factors
 
 ## Capabilities
@@ -111,6 +112,24 @@ browser-devtools-cli run js-in-browser --script "
   performance.getEntriesByType('longtask')
     .map(t => ({startTime: t.startTime, duration: t.duration}))
 "
+```
+
+## Backend Performance (node-devtools-cli)
+
+When TTFB or API latency suggests backend bottlenecks, inspect the Node.js process:
+
+```bash
+# Connect to API/server process
+node-devtools-cli --session-id perf debug connect --pid 12345
+
+# Check memory and CPU
+node-devtools-cli --session-id perf run js-in-node --script "process.memoryUsage()"
+node-devtools-cli --session-id perf run js-in-node --script "require('os').loadavg()"
+
+# Tracepoint on slow handler to capture call context
+node-devtools-cli --session-id perf debug put-tracepoint \
+  --url-pattern "routes/heavy.ts" \
+  --line-number 30
 ```
 
 ## Common Issues

@@ -17,8 +17,9 @@ npx skills add serkan-ozal/browser-devtools-skills
 | Skill | Description |
 |-------|-------------|
 | [browser-devtools-cli](skills/browser-devtools-cli/SKILL.md) | Complete CLI reference for browser automation |
+| [node-devtools-cli](skills/node-devtools-cli/SKILL.md) | CLI for Node.js backend debugging (tracepoints, logpoints, Inspector Protocol) |
 
-**Domain References:**
+**browser-devtools-cli Domain References:**
 - [navigation](skills/browser-devtools-cli/references/navigation.md) - Page navigation (go-to, back, forward, reload)
 - [content](skills/browser-devtools-cli/references/content.md) - Content extraction (screenshot, PDF, HTML, text)
 - [interaction](skills/browser-devtools-cli/references/interaction.md) - User interactions (click, fill, hover, scroll)
@@ -30,6 +31,9 @@ npx skills add serkan-ozal/browser-devtools-skills
 - [sync](skills/browser-devtools-cli/references/sync.md) - Synchronization (wait for network idle)
 - [react](skills/browser-devtools-cli/references/react.md) - React DevTools integration
 - [figma](skills/browser-devtools-cli/references/figma.md) - Figma design comparison
+
+**node-devtools-cli References:**
+- [debug](skills/node-devtools-cli/references/debug.md) - Connection, tracepoints, logpoints, snapshots
 
 ### Task-Specific Skills
 
@@ -50,14 +54,15 @@ npx skills add serkan-ozal/browser-devtools-skills
 # Install globally
 npm install -g browser-devtools-mcp
 
-# Navigate to a URL
+# Browser automation
 browser-devtools-cli navigation go-to --url "https://example.com"
-
-# Take a screenshot
 browser-devtools-cli content take-screenshot --name "homepage"
-
-# Get page content
 browser-devtools-cli content get-as-text
+
+# Node.js backend debugging
+node-devtools-cli daemon start
+node-devtools-cli debug connect --pid 12345
+node-devtools-cli debug put-tracepoint --url-pattern "server.js" --line-number 42
 ```
 
 ## License

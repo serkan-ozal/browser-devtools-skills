@@ -1,20 +1,20 @@
 ---
 name: debugging
-description: Debug web applications using console inspection, network analysis, and non-blocking code debugging. Use when the user reports bugs, wants to debug JavaScript, inspect network requests, troubleshoot page issues, trace function calls, or monitor exceptions.
-allowed-tools: Bash(browser-devtools-cli:*)
+description: Debug web and Node.js applications using console inspection, network analysis, and non-blocking code debugging. Use when the user reports bugs, wants to debug JavaScript (browser or backend), inspect network requests, troubleshoot page/API issues, trace function calls, or monitor exceptions.
+allowed-tools: Bash(browser-devtools-cli:*), Bash(node-devtools-cli:*)
 ---
 
 # Debugging Skill
 
-Debug web applications using console inspection, network analysis, and non-blocking code debugging with tracepoints, logpoints, and exception monitoring.
+Debug web applications and Node.js backends using console inspection, network analysis, and non-blocking code debugging with tracepoints, logpoints, and exception monitoring.
 
 ## When to Use
 
 This skill activates when:
-- User reports a bug or error on a web page
-- User asks to debug JavaScript issues
+- User reports a bug or error on a web page or backend
+- User asks to debug JavaScript (frontend or Node.js)
 - User wants to inspect API calls or network requests
-- User needs to troubleshoot page loading issues
+- User needs to troubleshoot page loading or API handler issues
 - User mentions console errors or warnings
 - User wants to debug without breakpoints
 - User needs to trace function calls or monitor variables
@@ -94,6 +94,41 @@ browser-devtools-cli --json debug get-exceptionpoint-snapshots
 browser-devtools-cli --json debug get-dompoint-snapshots
 browser-devtools-cli --json debug get-netpoint-snapshots
 ```
+
+### Node.js Backend Debugging (node-devtools-cli)
+
+For debugging Node.js API servers, backends, or scripts:
+
+```bash
+# 1. Connect to process (by PID, name, or Docker)
+node-devtools-cli --session-id backend-debug debug connect --pid 12345
+node-devtools-cli --session-id backend-debug debug connect --process-name "server.js"
+
+# 2. Tracepoint on route handler or service
+node-devtools-cli --session-id backend-debug debug put-tracepoint \
+  --url-pattern "routes/api.ts" \
+  --line-number 42
+
+# 3. Exception monitoring
+node-devtools-cli --session-id backend-debug debug put-exceptionpoint --state uncaught
+
+# 4. Console logs from Node process
+node-devtools-cli --session-id backend-debug --json debug get-logs
+node-devtools-cli --session-id backend-debug --json debug get-logs --search "error"
+
+# 5. Run JavaScript in the connected process
+node-devtools-cli --session-id backend-debug run js-in-node --script "process.memoryUsage()"
+
+# 6. Retrieve snapshots (after triggering the code path)
+node-devtools-cli --session-id backend-debug --json debug get-tracepoint-snapshots
+node-devtools-cli --session-id backend-debug --json debug get-exceptionpoint-snapshots
+
+# 7. Status and cleanup
+node-devtools-cli --session-id backend-debug debug status
+node-devtools-cli debug disconnect
+```
+
+`urlPattern` in Node context matches **script file paths** (e.g., `server.js`, `routes/users.ts`). See [node-devtools-cli](../node-devtools-cli/SKILL.md) skill for full reference.
 
 ### Error Investigation
 ```bash
@@ -178,22 +213,23 @@ browser-devtools-cli session delete debug-session
 
 ## Probe Types Summary
 
-| Probe | Purpose | Output |
-|-------|---------|--------|
-| Tracepoint | Function calls | Stack, locals, watches |
-| Logpoint | Expression values | Evaluated result |
-| Exceptionpoint | Error catching | Error, stack trace |
-| Dompoint | DOM mutations | Changed nodes |
-| Netpoint | Network calls | Request/response |
+| Probe | Purpose | Output | CLI |
+|-------|---------|--------|-----|
+| Tracepoint | Function calls | Stack, locals, watches | browser-devtools-cli, node-devtools-cli |
+| Logpoint | Expression values | Evaluated result | both |
+| Exceptionpoint | Error catching | Error, stack trace | both |
+| Dompoint | DOM mutations | Changed nodes | browser-devtools-cli only |
+| Netpoint | Network calls | Request/response | browser-devtools-cli only |
 
 ## Best Practices
 
-1. **Always check console for errors first**
-2. **Filter network requests** to relevant endpoints
-3. **Take screenshots** before and after actions
-4. **Use source maps** for minified/bundled code
-5. **Start with exceptions** to catch errors first
-6. **Use logpoints** for lightweight monitoring
-7. **Poll snapshots** with `--from-sequence` for efficiency
-8. **Clear probes** when done to avoid overhead
-9. **Document reproduction steps** clearly
+1. **Choose the right CLI**: Use `browser-devtools-cli` for frontend/page debugging; use `node-devtools-cli` for Node.js backend/API debugging
+2. **Always check console for errors first**
+3. **Filter network requests** to relevant endpoints
+4. **Take screenshots** before and after actions (browser)
+5. **Use source maps** for minified/bundled code
+6. **Start with exceptions** to catch errors first
+7. **Use logpoints** for lightweight monitoring
+8. **Poll snapshots** with `--from-sequence` for efficiency
+9. **Clear probes** when done to avoid overhead
+10. **Document reproduction steps** clearly

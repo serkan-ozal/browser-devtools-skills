@@ -6,7 +6,7 @@ allowed-tools: Bash(browser-devtools-cli:*)
 
 # Browser DevTools CLI
 
-Command-line interface for browser automation, debugging, and testing using Playwright.
+Command-line interface for browser automation, debugging, and testing using Playwright. This CLI is for the **browser platform**; for Node.js backend debugging, use `node-devtools-cli` (see `node-devtools-cli` skill).
 
 ## Installation
 
@@ -274,7 +274,11 @@ browser-devtools-cli --no-headless interactive   # With visible browser
 ## Shell Completions
 
 ```bash
-# Generate and install completions
+# Bash
+browser-devtools-cli completion bash
 echo 'eval "$(browser-devtools-cli completion bash)"' >> ~/.bashrc
+
+# Zsh
+browser-devtools-cli completion zsh
 echo 'eval "$(browser-devtools-cli completion zsh)"' >> ~/.zshrc
 ```
