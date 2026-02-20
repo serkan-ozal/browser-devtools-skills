@@ -1,29 +1,31 @@
 # Interaction Tools
 
-User interaction simulation commands.
+User interaction simulation commands. All tools accept **CSS selector or ref** (e.g. `e1`, `@e1`) from the last `a11y take-aria-snapshot`. Use refs when selectors are fragile or elements lack stable IDs.
 
 ## click
 
 Click an element on the page.
 
 ```bash
-browser-devtools-cli interaction click --selector <selector>
+browser-devtools-cli interaction click --selector <selector-or-ref>
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | Yes | - | CSS selector for element to click |
+| `--selector` | string | Yes | - | CSS selector or ref (e1, @e1) for element to click |
+| `--timeout-ms` | number | No | 10000 | Timeout when waiting for element |
 
 **Examples:**
 
 ```bash
+# Click by ref (from ARIA snapshot)
+browser-devtools-cli a11y take-aria-snapshot
+browser-devtools-cli interaction click --selector "e1"
+
 # Click a button
 browser-devtools-cli interaction click --selector "button#submit"
-
-# Click a link
-browser-devtools-cli interaction click --selector "a.nav-link"
 
 # Click by data-testid
 browser-devtools-cli interaction click --selector "[data-testid='login-btn']"
@@ -36,15 +38,16 @@ browser-devtools-cli interaction click --selector "[data-testid='login-btn']"
 Fill out an input field (clears existing content first).
 
 ```bash
-browser-devtools-cli interaction fill --selector <selector> --value <value>
+browser-devtools-cli interaction fill --selector <selector-or-ref> --value <value>
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | Yes | - | CSS selector for input field |
+| `--selector` | string | Yes | - | CSS selector or ref (e1, @e1) for input field |
 | `--value` | string | Yes | - | Value to fill |
+| `--timeout-ms` | number | No | 10000 | Timeout when waiting for element |
 
 **Examples:**
 
@@ -66,14 +69,14 @@ browser-devtools-cli interaction fill --selector "textarea#message" --value "Hel
 Hover over an element.
 
 ```bash
-browser-devtools-cli interaction hover --selector <selector>
+browser-devtools-cli interaction hover --selector <selector-or-ref>
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | Yes | - | CSS selector for element to hover |
+| `--selector` | string | Yes | - | CSS selector or ref (e1, @e1) for element to hover |
 
 **Examples:**
 
@@ -92,14 +95,14 @@ browser-devtools-cli interaction hover --selector "[data-tooltip]"
 Select an option from a dropdown.
 
 ```bash
-browser-devtools-cli interaction select --selector <selector> --value <value>
+browser-devtools-cli interaction select --selector <selector-or-ref> --value <value>
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | Yes | - | CSS selector for select element |
+| `--selector` | string | Yes | - | CSS selector or ref (e1, @e1) for select element |
 | `--value` | string | Yes | - | Option value to select |
 
 **Examples:**
@@ -127,7 +130,7 @@ browser-devtools-cli interaction press-key --key <key> [options]
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
 | `--key` | string | Yes | - | Key to press (e.g., Enter, Tab, Escape) |
-| `--selector` | string | No | - | Element to focus before pressing |
+| `--selector` | string | No | - | CSS selector or ref (e1, @e1) to focus before pressing |
 
 **Examples:**
 
@@ -159,7 +162,7 @@ browser-devtools-cli interaction scroll [options]
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | No | - | Element to scroll (defaults to page) |
+| `--selector` | string | No | - | CSS selector or ref (e1, @e1) for scroll container (defaults to page) |
 | `--direction` | enum | No | `down` | Scroll direction: up, down, left, right |
 | `--amount` | number | No | `100` | Scroll amount in pixels |
 
@@ -183,20 +186,23 @@ browser-devtools-cli interaction scroll --direction up --amount 200
 Drag an element to another location.
 
 ```bash
-browser-devtools-cli interaction drag --source <selector> --target <selector>
+browser-devtools-cli interaction drag --source-selector <selector-or-ref> --target-selector <selector-or-ref>
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--source` | string | Yes | - | CSS selector for element to drag |
-| `--target` | string | Yes | - | CSS selector for drop target |
+| `--source-selector` | string | Yes | - | CSS selector or ref (e1, @e1) for element to drag |
+| `--target-selector` | string | Yes | - | CSS selector or ref (e2, @e2) for drop target |
 
-**Example:**
+**Examples:**
 
 ```bash
-browser-devtools-cli interaction drag --source ".draggable" --target ".dropzone"
+browser-devtools-cli interaction drag --source-selector ".draggable" --target-selector ".dropzone"
+
+# Using refs from ARIA snapshot
+browser-devtools-cli interaction drag --source-selector "e1" --target-selector "e2"
 ```
 
 ---

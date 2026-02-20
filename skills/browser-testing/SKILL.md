@@ -30,8 +30,11 @@ browser-devtools-cli navigation reload
 ```
 
 ### Interaction
+All accept CSS selector or ref (e1, @e1) from ARIA snapshot.
+
 ```bash
 browser-devtools-cli interaction click --selector "#button"
+browser-devtools-cli interaction click --selector "e1"   # ref from a11y take-aria-snapshot
 browser-devtools-cli interaction fill --selector "#input" --value "text"
 browser-devtools-cli interaction select --selector "#dropdown" --value "option"
 browser-devtools-cli interaction hover --selector "#element"
@@ -71,9 +74,10 @@ browser-devtools-cli run js-in-sandbox --code "return await page.title()"
 
 1. **Navigate**: Go to the page under test
 2. **Wait**: Ensure page is fully loaded
-3. **Interact**: Click, fill, scroll as needed
-4. **Verify**: Check page state, take screenshots
-5. **Document**: Report results
+3. **Snapshot** (optional): `a11y take-aria-snapshot` to get refs (e1, e2) for stable element targeting
+4. **Interact**: Click, fill, scroll (use `--selector "e1"` for refs or CSS selector)
+5. **Verify**: Check page state, take screenshots
+6. **Document**: Report results
 
 ## Form Automation Patterns
 

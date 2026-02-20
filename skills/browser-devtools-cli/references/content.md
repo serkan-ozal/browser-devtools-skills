@@ -25,6 +25,9 @@ browser-devtools-cli content take-screenshot [options]
 | `--type` | enum | No | `png` | Image format: `png` or `jpeg` |
 | `--quality` | number | No | `100` | JPEG quality (0-100, ignored for PNG) |
 | `--include-base64` | boolean | No | `false` | Include image data in response (for remote MCP servers) |
+| `--annotate` | boolean | No | `false` | Overlay numbered labels [1],[2] on interactive elements (from last ARIA snapshot refs). Labels map to e1,e2,... |
+| `--annotate-content` | boolean | No | `false` | With annotate: also include content elements (headings, list items) in overlay |
+| `--annotate-cursor-interactive` | boolean | No | `false` | With annotate: include cursor-interactive elements (clickable without ARIA role). Takes fresh snapshot |
 
 **When to use `--include-base64`:**
 - Remote MCP server (different machine)
@@ -54,6 +57,13 @@ browser-devtools-cli --json content take-screenshot --name "test" --include-base
 
 # JSON output for parsing file path
 browser-devtools-cli --json content take-screenshot --name "test"
+
+# Annotated screenshot (overlay ref labels) - call a11y take-aria-snapshot first
+browser-devtools-cli a11y take-aria-snapshot
+browser-devtools-cli content take-screenshot --annotate --name "annotated"
+
+# Include content elements (headings) in annotation
+browser-devtools-cli content take-screenshot --annotate --annotate-content --name "full-annotated"
 ```
 
 **Output (JSON) - Default (without `--include-base64`):**
@@ -73,6 +83,23 @@ browser-devtools-cli --json content take-screenshot --name "test"
     "data": "<base64-encoded-image-data>",
     "mimeType": "image/png"
   }
+}
+```
+
+**Output (JSON) - With `--annotate`:**
+
+```json
+{
+  "filePath": "/tmp/screenshot-20240115-143022.png",
+  "annotations": [
+    {
+      "ref": "e1",
+      "number": 1,
+      "role": "button",
+      "name": "Submit",
+      "box": { "x": 100, "y": 200, "width": 80, "height": 32 }
+    }
+  ]
 }
 ```
 

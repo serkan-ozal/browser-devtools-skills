@@ -75,8 +75,11 @@ SESSION="--session-id a11y-audit"
 browser-devtools-cli $SESSION navigation go-to --url "https://example.com"
 browser-devtools-cli $SESSION sync wait-for-network-idle
 
-# 2. Get ARIA snapshot (quick overview)
+# 2. Get ARIA snapshot (quick overview, returns refs e1,e2,...)
 browser-devtools-cli $SESSION a11y take-aria-snapshot
+
+# Optional: include custom clickable elements (div/span with cursor:pointer)
+browser-devtools-cli $SESSION a11y take-aria-snapshot --cursor-interactive
 
 # 3. Get detailed AX tree
 browser-devtools-cli $SESSION --json a11y take-ax-tree-snapshot \

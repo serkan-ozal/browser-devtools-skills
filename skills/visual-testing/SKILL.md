@@ -30,6 +30,15 @@ browser-devtools-cli content take-screenshot --name "photo" --type jpeg --qualit
 browser-devtools-cli content save-as-pdf --name "page" --format A4
 ```
 
+### Annotated Screenshot (ref labels)
+Overlay numbered labels [1],[2] on interactive elements. Call `a11y take-aria-snapshot` first.
+
+```bash
+browser-devtools-cli a11y take-aria-snapshot
+browser-devtools-cli content take-screenshot --annotate --name "annotated"
+browser-devtools-cli content take-screenshot --annotate --annotate-content --name "with-headings"
+```
+
 ### Responsive Testing
 ```bash
 browser-devtools-cli interaction resize-viewport --width 375 --height 667   # Mobile

@@ -27,6 +27,8 @@ browser-devtools-cli content take-screenshot --name "homepage"
 browser-devtools-cli content get-as-text
 ```
 
+**Ref-based workflow** (recommended for AI agents): Call `a11y take-aria-snapshot` first to get refs (e1, e2, ...), then use refs in `interaction click --selector "e1"` or `content take-screenshot --annotate` for numbered element labels.
+
 ## Global Options
 
 | Option | Description | Default |
