@@ -33,7 +33,8 @@ npx skills add serkan-ozal/browser-devtools-skills
 - [figma](skills/browser-devtools-cli/references/figma.md) - Figma design comparison
 
 **node-devtools-cli References:**
-- [debug](skills/node-devtools-cli/references/debug.md) - Connection, tracepoints, logpoints, snapshots
+- [debug](skills/node-devtools-cli/references/debug.md) - Connection, tracepoints, logpoints, exceptionpoints, snapshots
+- [run](skills/node-devtools-cli/references/run.md) - JavaScript execution in connected Node process
 
 ### Task-Specific Skills
 
@@ -59,10 +60,10 @@ browser-devtools-cli navigation go-to --url "https://example.com"
 browser-devtools-cli content take-screenshot --name "homepage"
 browser-devtools-cli content get-as-text
 
-# Node.js backend debugging
-node-devtools-cli daemon start
-node-devtools-cli debug connect --pid 12345
-node-devtools-cli debug put-tracepoint --url-pattern "server.js" --line-number 42
+# Node.js backend debugging (requires PLATFORM=node daemon; use --port 2021 if browser daemon is on 2020)
+PLATFORM=node node-devtools-cli daemon start --port 2021
+node-devtools-cli --port 2021 debug connect --pid 12345
+node-devtools-cli --port 2021 debug put-tracepoint --url-pattern "server.js" --line-number 42
 ```
 
 ## License
