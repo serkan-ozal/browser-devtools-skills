@@ -77,6 +77,7 @@ browser-devtools-cli interaction hover --selector <selector-or-ref>
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
 | `--selector` | string | Yes | - | CSS selector or ref (e1, @e1) for element to hover |
+| `--timeout-ms` | number | No | 10000 | Timeout when waiting for element |
 
 **Examples:**
 
@@ -104,6 +105,7 @@ browser-devtools-cli interaction select --selector <selector-or-ref> --value <va
 |----------|------|----------|---------|-------------|
 | `--selector` | string | Yes | - | CSS selector or ref (e1, @e1) for select element |
 | `--value` | string | Yes | - | Option value to select |
+| `--timeout-ms` | number | No | 10000 | Timeout when waiting for element |
 
 **Examples:**
 
@@ -119,7 +121,7 @@ browser-devtools-cli interaction select --selector "#size" --value "Large"
 
 ## press-key
 
-Press a keyboard key.
+Press a keyboard key. Supports optional hold and repeat (e.g. for scroll-by-key).
 
 ```bash
 browser-devtools-cli interaction press-key --key <key> [options]
@@ -129,8 +131,12 @@ browser-devtools-cli interaction press-key --key <key> [options]
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--key` | string | Yes | - | Key to press (e.g., Enter, Tab, Escape) |
+| `--key` | string | Yes | - | Key to press (e.g., Enter, Tab, Escape, ArrowDown, Space) |
 | `--selector` | string | No | - | CSS selector or ref (e1, @e1) to focus before pressing |
+| `--hold-ms` | number | No | - | Ms between keydown and keyup |
+| `--repeat` | boolean | No | `false` | Repeat key while holdMs (e.g. for scroll) |
+| `--repeat-interval-ms` | number | No | `50` | Interval between repeated presses when repeat=true (min 10) |
+| `--timeout-ms` | number | No | 10000 | Timeout when waiting for selector (if used) |
 
 **Examples:**
 
@@ -152,7 +158,7 @@ browser-devtools-cli interaction press-key --selector "#search" --key "Enter"
 
 ## scroll
 
-Scroll the page or an element.
+Scroll the page viewport or a scrollable element.
 
 ```bash
 browser-devtools-cli interaction scroll [options]
@@ -162,21 +168,31 @@ browser-devtools-cli interaction scroll [options]
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | No | - | CSS selector or ref (e1, @e1) for scroll container (defaults to page) |
-| `--direction` | enum | No | `down` | Scroll direction: up, down, left, right |
-| `--amount` | number | No | `100` | Scroll amount in pixels |
+| `--mode` | enum | No | `by` | `by` (dx/dy), `to` (x/y), `top`, `bottom`, `left`, `right` |
+| `--selector` | string | No | - | CSS selector or ref for scroll container (omit = viewport) |
+| `--dx` | number | No | - | Delta X for mode=by (pixels) |
+| `--dy` | number | No | - | Delta Y for mode=by (pixels) |
+| `--x` | number | No | - | Absolute X for mode=to |
+| `--y` | number | No | - | Absolute Y for mode=to |
+| `--behavior` | enum | No | `auto` | `auto` or `smooth` |
 
 **Examples:**
 
 ```bash
-# Scroll down
-browser-devtools-cli interaction scroll --direction down --amount 500
+# Scroll down by 500px
+browser-devtools-cli interaction scroll --mode by --dy 500
 
-# Scroll element into view
-browser-devtools-cli interaction scroll --selector "#footer"
+# Scroll to bottom of page
+browser-devtools-cli interaction scroll --mode bottom
+
+# Scroll inside a container
+browser-devtools-cli interaction scroll --selector "#sidebar" --mode bottom
 
 # Scroll up
-browser-devtools-cli interaction scroll --direction up --amount 200
+browser-devtools-cli interaction scroll --mode by --dy -200
+
+# Smooth scroll to position
+browser-devtools-cli interaction scroll --mode to --x 0 --y 1000 --behavior smooth
 ```
 
 ---
@@ -195,6 +211,7 @@ browser-devtools-cli interaction drag --source-selector <selector-or-ref> --targ
 |----------|------|----------|---------|-------------|
 | `--source-selector` | string | Yes | - | CSS selector or ref (e1, @e1) for element to drag |
 | `--target-selector` | string | Yes | - | CSS selector or ref (e2, @e2) for drop target |
+| `--timeout-ms` | number | No | 10000 | Timeout when waiting for elements |
 
 **Examples:**
 
@@ -239,18 +256,19 @@ browser-devtools-cli interaction resize-viewport --width 768 --height 1024
 
 ## resize-window
 
-Resize the browser window.
+Resize the real browser window (OS-level). Best with Chromium and headful mode.
 
 ```bash
-browser-devtools-cli interaction resize-window --width <px> --height <px>
+browser-devtools-cli interaction resize-window [options]
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--width` | number | Yes | - | Window width in pixels |
-| `--height` | number | Yes | - | Window height in pixels |
+| `--width` | number | No* | - | Window width in pixels (*required when state=normal) |
+| `--height` | number | No* | - | Window height in pixels (*required when state=normal) |
+| `--state` | enum | No | `normal` | `normal`, `maximized`, `minimized`, `fullscreen` (width/height ignored when not normal) |
 
 ## Form Automation Example
 

@@ -20,7 +20,7 @@ npx skills add serkan-ozal/browser-devtools-skills
 | [node-devtools-cli](skills/node-devtools-cli/SKILL.md) | CLI for Node.js backend debugging (tracepoints, logpoints, Inspector Protocol) |
 
 **browser-devtools-cli Domain References:**
-- [navigation](skills/browser-devtools-cli/references/navigation.md) - Page navigation (go-to, back, forward, reload)
+- [navigation](skills/browser-devtools-cli/references/navigation.md) - Page navigation (go-to, go-back-or-forward, reload)
 - [content](skills/browser-devtools-cli/references/content.md) - Content extraction (screenshot, PDF, HTML, text)
 - [interaction](skills/browser-devtools-cli/references/interaction.md) - User interactions (click, fill, hover, scroll)
 - [a11y](skills/browser-devtools-cli/references/a11y.md) - Accessibility snapshots (ARIA, AX tree)

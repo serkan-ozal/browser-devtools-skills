@@ -161,7 +161,7 @@ browser-devtools-cli navigation go-to --url "https://example.com"
 browser-devtools-cli --json o11y get-web-vitals
 
 # Check console for errors
-browser-devtools-cli --json o11y get-console-messages --types error,warn
+browser-devtools-cli --json o11y get-console-messages --type warning
 
 # Analyze HTTP requests
 browser-devtools-cli --json o11y get-http-requests
@@ -185,14 +185,14 @@ browser-devtools-cli --json a11y take-ax-tree-snapshot --roles button,link,textb
 ```bash
 # Mock API response
 browser-devtools-cli stub mock-http-response \
-  --url-pattern "**/api/users" \
+  --pattern "**/api/users" \
   --body '[{"id": 1, "name": "Test User"}]'
 
 # Navigate and test
 browser-devtools-cli navigation go-to --url "https://app.example.com"
 
 # Clear mocks
-browser-devtools-cli stub clear --all
+browser-devtools-cli stub clear
 ```
 
 ### Non-Blocking Debugging
@@ -214,16 +214,12 @@ browser-devtools-cli $SESSION debug add-watch --expression "this"
 # Enable exception catching
 browser-devtools-cli $SESSION debug put-exceptionpoint --state uncaught
 
-# Monitor API calls
-browser-devtools-cli $SESSION debug put-netpoint --url-pattern "/api/*"
-
 # Interact with app (triggers probes)
 browser-devtools-cli $SESSION interaction click --selector "#submit-btn"
 
 # Get captured snapshots
-browser-devtools-cli $SESSION --json debug get-tracepoint-snapshots
-browser-devtools-cli $SESSION --json debug get-exceptionpoint-snapshots
-browser-devtools-cli $SESSION --json debug get-netpoint-snapshots
+browser-devtools-cli $SESSION --json debug get-probe-snapshots
+browser-devtools-cli $SESSION --json debug get-probe-snapshots --types tracepoint,exceptionpoint
 ```
 
 ### Shell Script for CI/CD
@@ -248,7 +244,7 @@ VITALS=$($CLI o11y get-web-vitals)
 echo "Web Vitals: $VITALS"
 
 # Check for console errors
-ERRORS=$($CLI o11y get-console-messages --types error)
+ERRORS=$($CLI o11y get-console-messages --type error)
 if [ "$ERRORS" != "[]" ]; then
   echo "Console errors found: $ERRORS"
   exit 1

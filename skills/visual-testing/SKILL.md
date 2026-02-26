@@ -183,7 +183,7 @@ browser-devtools-cli figma compare-page-with-design \
 browser-devtools-cli figma compare-page-with-design \
   --figma-file-key "ABC123" \
   --figma-node-id "1:2" \
-  --full-page true
+  --full-page
 ```
 
 ### Component Comparison

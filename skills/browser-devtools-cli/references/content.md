@@ -118,11 +118,10 @@ browser-devtools-cli content save-as-pdf [options]
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
 | `--output-path` | string | No | OS temp dir | Directory to save PDF |
-| `--name` | string | No | `page` | PDF name |
-| `--format` | enum | No | `A4` | Paper format (Letter, Legal, A4, etc.) |
-| `--landscape` | boolean | No | `false` | Landscape orientation |
-| `--print-background` | boolean | No | `true` | Print background graphics |
-| `--scale` | number | No | `1` | Scale factor (0.1-2) |
+| `--name` | string | No | `page` | PDF filename base (file: `{name}-{time}.pdf`) |
+| `--format` | enum | No | `A4` | Paper size: Letter, Legal, Tabloid, Ledger, A0–A6 |
+| `--print-background` | boolean | No | `false` | Print background graphics |
+| `--margin` | object | No | `1cm` all sides | Margins: top, right, bottom, left (e.g. `"1cm"`) |
 
 **Examples:**
 
@@ -130,8 +129,8 @@ browser-devtools-cli content save-as-pdf [options]
 # Basic PDF
 browser-devtools-cli content save-as-pdf --name "report"
 
-# Letter format, landscape
-browser-devtools-cli content save-as-pdf --format Letter --landscape --name "slides"
+# Letter format with background
+browser-devtools-cli content save-as-pdf --format Letter --print-background --name "slides"
 
 # JSON output
 browser-devtools-cli --json content save-as-pdf --name "document"
@@ -141,7 +140,7 @@ browser-devtools-cli --json content save-as-pdf --name "document"
 
 ## get-as-html
 
-Get HTML content of the page or an element.
+Get HTML content of the page or an element. By default scripts are removed; use options to include or clean content.
 
 ```bash
 browser-devtools-cli content get-as-html [options]
@@ -151,20 +150,26 @@ browser-devtools-cli content get-as-html [options]
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | No | - | CSS selector (defaults to full page) |
-| `--outer` | boolean | No | `true` | Include outer HTML |
+| `--selector` | string | No | - | CSS selector or ref (omit for full document) |
+| `--remove-scripts` | boolean | No | `true` | Remove `<script>` tags from output |
+| `--remove-comments` | boolean | No | `false` | Remove HTML comments |
+| `--remove-styles` | boolean | No | `false` | Remove `<style>` tags |
+| `--remove-meta` | boolean | No | `false` | Remove meta tags |
+| `--clean-html` | boolean | No | `false` | Normalize/clean HTML |
+| `--minify` | boolean | No | `false` | Minify output |
+| `--max-length` | number | No | `50000` | Truncate after this many characters |
 
 **Examples:**
 
 ```bash
-# Full page HTML
+# Full page HTML (scripts removed by default)
 browser-devtools-cli content get-as-html
 
 # Specific element
 browser-devtools-cli content get-as-html --selector "#main"
 
-# Inner HTML only
-browser-devtools-cli content get-as-html --selector "#content" --outer false
+# Include scripts and minify
+browser-devtools-cli content get-as-html --selector "#content" --remove-scripts false --minify
 ```
 
 ---
@@ -181,7 +186,8 @@ browser-devtools-cli content get-as-text [options]
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | No | - | CSS selector (defaults to body) |
+| `--selector` | string | No | - | CSS selector or ref (omit for full page) |
+| `--max-length` | number | No | `50000` | Truncate text after this many characters |
 
 **Examples:**
 

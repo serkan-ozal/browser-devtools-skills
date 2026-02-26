@@ -24,14 +24,14 @@ This skill activates when:
 ### Console Inspection
 ```bash
 browser-devtools-cli o11y get-console-messages
-browser-devtools-cli o11y get-console-messages --types error,warn
-browser-devtools-cli --json o11y get-console-messages --types error
+browser-devtools-cli o11y get-console-messages --type warning
+browser-devtools-cli --json o11y get-console-messages --type error
 ```
 
 ### Network Analysis
 ```bash
 browser-devtools-cli o11y get-http-requests
-browser-devtools-cli --json o11y get-http-requests --resource-type fetch,xhr
+browser-devtools-cli --json o11y get-http-requests --resource-type fetch
 browser-devtools-cli --json o11y get-http-requests --status-min 400
 ```
 
@@ -45,16 +45,17 @@ browser-devtools-cli run js-in-sandbox --code "return await page.evaluate(() => 
 ### Tracepoints (Non-Blocking)
 ```bash
 browser-devtools-cli debug put-tracepoint --url-pattern "app.js" --line-number 42
-browser-devtools-cli debug list-tracepoints
-browser-devtools-cli debug remove-tracepoint --id <tracepoint-id>
-browser-devtools-cli debug clear-tracepoints
+browser-devtools-cli debug list-probes --types tracepoint
+browser-devtools-cli debug remove-probe --type tracepoint --id <probe-id>
+browser-devtools-cli debug clear-probes --types tracepoint
 ```
 
 ### Logpoints
 ```bash
-browser-devtools-cli debug put-logpoint --url-pattern "app.js" --line-number 50 --expression "user.id"
-browser-devtools-cli debug list-logpoints
-browser-devtools-cli debug clear-logpoints
+browser-devtools-cli debug put-logpoint --url-pattern "app.js" --line-number 50 --log-expression "user.id"
+browser-devtools-cli debug list-probes --types logpoint
+browser-devtools-cli debug remove-probe --type logpoint --id <probe-id>
+browser-devtools-cli debug clear-probes --types logpoint
 ```
 
 ### Exception Monitoring
@@ -63,36 +64,22 @@ browser-devtools-cli debug put-exceptionpoint --state uncaught
 browser-devtools-cli debug put-exceptionpoint --state all
 ```
 
-### DOM Mutation Monitoring
-```bash
-browser-devtools-cli debug put-dompoint --selector "#content" --type subtree-modified
-browser-devtools-cli debug put-dompoint --selector "#element" --type attribute-modified
-browser-devtools-cli debug list-dompoints
-browser-devtools-cli debug clear-dompoints
-```
-
-### Network Point Monitoring
-```bash
-browser-devtools-cli debug put-netpoint --url-pattern "/api/*"
-browser-devtools-cli debug list-netpoints
-browser-devtools-cli debug clear-netpoints
-```
-
 ### Watch Expressions
 ```bash
 browser-devtools-cli debug add-watch --expression "this"
 browser-devtools-cli debug add-watch --expression "user.id"
-browser-devtools-cli debug list-watches
-browser-devtools-cli debug clear-watches
+browser-devtools-cli debug list-probes --types watch
+browser-devtools-cli debug remove-probe --type watch --id <probe-id>
+browser-devtools-cli debug clear-probes --types watches
 ```
 
-### Retrieve Snapshots
+### Retrieve and Clear Snapshots (Unified)
 ```bash
-browser-devtools-cli --json debug get-tracepoint-snapshots
-browser-devtools-cli --json debug get-logpoint-snapshots
-browser-devtools-cli --json debug get-exceptionpoint-snapshots
-browser-devtools-cli --json debug get-dompoint-snapshots
-browser-devtools-cli --json debug get-netpoint-snapshots
+browser-devtools-cli --json debug get-probe-snapshots
+browser-devtools-cli --json debug get-probe-snapshots --types tracepoint,logpoint,exceptionpoint
+browser-devtools-cli --json debug get-probe-snapshots --probe-id "tp_abc" --from-sequence 0
+browser-devtools-cli debug clear-probe-snapshots
+browser-devtools-cli debug clear-probe-snapshots --types tracepoint --probe-id "tp_abc"
 ```
 
 ### Node.js Backend Debugging (node-devtools-cli)
@@ -120,8 +107,8 @@ node-devtools-cli --session-id backend-debug --json debug get-logs --search "err
 node-devtools-cli --session-id backend-debug run js-in-node --script "process.memoryUsage()"
 
 # 6. Retrieve snapshots (after triggering the code path)
-node-devtools-cli --session-id backend-debug --json debug get-tracepoint-snapshots
-node-devtools-cli --session-id backend-debug --json debug get-exceptionpoint-snapshots
+node-devtools-cli --session-id backend-debug --json debug get-probe-snapshots
+node-devtools-cli --session-id backend-debug --json debug get-probe-snapshots --types tracepoint,exceptionpoint
 
 # 7. Status and cleanup
 node-devtools-cli --session-id backend-debug debug status
@@ -149,7 +136,7 @@ browser-devtools-cli content get-as-html --selector ".error-container"
 # Quick debug workflow
 browser-devtools-cli navigation go-to --url "https://example.com"
 browser-devtools-cli content take-screenshot --name "initial"
-browser-devtools-cli --json o11y get-console-messages --types error,warn
+browser-devtools-cli --json o11y get-console-messages --type warning
 browser-devtools-cli --json o11y get-http-requests --status-min 400
 ```
 
@@ -170,14 +157,6 @@ browser-devtools-cli $SESSION debug put-tracepoint \
 
 # Exception monitoring
 browser-devtools-cli $SESSION debug put-exceptionpoint --state uncaught
-
-# Network monitoring
-browser-devtools-cli $SESSION debug put-netpoint --url-pattern "/api/*"
-
-# DOM mutation monitoring
-browser-devtools-cli $SESSION debug put-dompoint \
-  --selector "#dynamic-content" \
-  --type subtree-modified
 ```
 
 ### 2. Add Watch Expressions
@@ -197,17 +176,16 @@ browser-devtools-cli $SESSION sync wait-for-network-idle
 ### 4. Retrieve Snapshots
 
 ```bash
-browser-devtools-cli $SESSION --json debug get-tracepoint-snapshots
-browser-devtools-cli $SESSION --json debug get-exceptionpoint-snapshots
-browser-devtools-cli $SESSION --json debug get-netpoint-snapshots
-browser-devtools-cli $SESSION --json debug get-dompoint-snapshots
+browser-devtools-cli $SESSION --json debug get-probe-snapshots
+browser-devtools-cli $SESSION --json debug get-probe-snapshots --types tracepoint,exceptionpoint
+browser-devtools-cli $SESSION --json debug get-probe-snapshots --from-sequence 0
 ```
 
 ### 5. Clean Up
 
 ```bash
-browser-devtools-cli $SESSION debug clear-tracepoints
-browser-devtools-cli $SESSION debug clear-watches
+browser-devtools-cli $SESSION debug clear-probes
+browser-devtools-cli $SESSION debug clear-probe-snapshots
 browser-devtools-cli session delete debug-session
 ```
 
@@ -218,8 +196,7 @@ browser-devtools-cli session delete debug-session
 | Tracepoint | Function calls | Stack, locals, watches | browser-devtools-cli, node-devtools-cli |
 | Logpoint | Expression values | Evaluated result | both |
 | Exceptionpoint | Error catching | Error, stack trace | both |
-| Dompoint | DOM mutations | Changed nodes | browser-devtools-cli only |
-| Netpoint | Network calls | Request/response | browser-devtools-cli only |
+| Watch | Per-tracepoint expressions | watchResults in snapshot | list/remove via list-probes, remove-probe, clear-probes |
 
 ## Best Practices
 

@@ -7,14 +7,14 @@ JavaScript execution commands.
 Execute JavaScript code in the browser page context.
 
 ```bash
-browser-devtools-cli run js-in-browser --code <code>
+browser-devtools-cli run js-in-browser --script <script>
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--code` | string | Yes | - | JavaScript code to execute |
+| `--script` | string | Yes | - | JavaScript code to execute |
 
 **Context available:**
 - `window` - Browser window object
@@ -25,22 +25,22 @@ browser-devtools-cli run js-in-browser --code <code>
 
 ```bash
 # Get page title
-browser-devtools-cli run js-in-browser --code "document.title"
+browser-devtools-cli run js-in-browser --script "document.title"
 
 # Get element text
-browser-devtools-cli run js-in-browser --code "document.querySelector('h1').textContent"
+browser-devtools-cli run js-in-browser --script "document.querySelector('h1').textContent"
 
 # Get all links (JSON for parsing)
-browser-devtools-cli --json run js-in-browser --code "Array.from(document.querySelectorAll('a')).map(a => a.href)"
+browser-devtools-cli --json run js-in-browser --script "Array.from(document.querySelectorAll('a')).map(a => a.href)"
 
 # Access localStorage
-browser-devtools-cli --json run js-in-browser --code "JSON.stringify(localStorage)"
+browser-devtools-cli --json run js-in-browser --script "JSON.stringify(localStorage)"
 
 # Get computed styles
-browser-devtools-cli run js-in-browser --code "getComputedStyle(document.body).fontSize"
+browser-devtools-cli run js-in-browser --script "getComputedStyle(document.body).fontSize"
 
 # Check if element exists
-browser-devtools-cli --json run js-in-browser --code "!!document.querySelector('#login-form')"
+browser-devtools-cli --json run js-in-browser --script "!!document.querySelector('#login-form')"
 ```
 
 **Output (JSON):**
@@ -55,17 +55,18 @@ browser-devtools-cli --json run js-in-browser --code "!!document.querySelector('
 
 ## js-in-sandbox
 
-Execute JavaScript code in a Node.js sandbox environment.
+Execute JavaScript code in a Node.js sandbox environment (runs on MCP server, not in browser). Has access to Playwright `page` and safe built-ins.
 
 ```bash
-browser-devtools-cli run js-in-sandbox --code <code>
+browser-devtools-cli run js-in-sandbox --code <code> [options]
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--code` | string | Yes | - | JavaScript code to execute |
+| `--code` | string | Yes | - | JavaScript code to execute (async/return allowed) |
+| `--timeout-ms` | number | No | `5000` | Max VM CPU time in ms (0–30000); does not time out awaited Promises |
 
 **Context available:**
 - `page` - Playwright Page object
@@ -104,14 +105,14 @@ SESSION="--session-id extract --json"
 browser-devtools-cli $SESSION navigation go-to --url "https://example.com"
 
 # Extract all links
-LINKS=$(browser-devtools-cli $SESSION run js-in-browser --code "
+LINKS=$(browser-devtools-cli $SESSION run js-in-browser --script "
   Array.from(document.querySelectorAll('a'))
     .map(a => ({ text: a.textContent.trim(), href: a.href }))
 ")
 echo "Links: $LINKS"
 
 # Extract metadata
-META=$(browser-devtools-cli $SESSION run js-in-browser --code "
+META=$(browser-devtools-cli $SESSION run js-in-browser --script "
   ({
     title: document.title,
     description: document.querySelector('meta[name=description]')?.content,
@@ -130,7 +131,7 @@ SESSION="--session-id state --json"
 browser-devtools-cli $SESSION navigation go-to --url "https://app.example.com"
 
 # Check application state
-browser-devtools-cli $SESSION run js-in-browser --code "
+browser-devtools-cli $SESSION run js-in-browser --script "
   JSON.stringify({
     localStorage: Object.keys(localStorage),
     sessionStorage: Object.keys(sessionStorage),
@@ -139,7 +140,7 @@ browser-devtools-cli $SESSION run js-in-browser --code "
 "
 
 # Check if user is logged in
-browser-devtools-cli $SESSION run js-in-browser --code "
+browser-devtools-cli $SESSION run js-in-browser --script "
   !!localStorage.getItem('authToken')
 "
 ```
@@ -153,7 +154,7 @@ SESSION="--session-id dom-test"
 browser-devtools-cli $SESSION navigation go-to --url "https://example.com"
 
 # Highlight element for debugging
-browser-devtools-cli $SESSION run js-in-browser --code "
+browser-devtools-cli $SESSION run js-in-browser --script "
   document.querySelector('h1').style.border = '3px solid red'
 "
 
@@ -161,7 +162,7 @@ browser-devtools-cli $SESSION run js-in-browser --code "
 browser-devtools-cli $SESSION content take-screenshot --name "highlighted"
 
 # Remove highlight
-browser-devtools-cli $SESSION run js-in-browser --code "
+browser-devtools-cli $SESSION run js-in-browser --script "
   document.querySelector('h1').style.border = ''
 "
 ```

@@ -2,9 +2,13 @@
 
 Non-blocking debugging for Node.js backend processes. Connect first, then set probes.
 
+**Unified API:** Use `debug list-probes`, `debug remove-probe`, `debug clear-probes`, `debug get-probe-snapshots`, and `debug clear-probe-snapshots` for tracepoints, logpoints, and (where applicable) watches/snapshots.
+
 ## Connection
 
 ### Connect
+
+MCP parameters: `pid`, `processName`, `containerId`, `containerName`, `host`, `inspectorPort`, `wsUrl`.
 
 ```bash
 # By PID
@@ -14,10 +18,11 @@ node-devtools-cli debug connect --pid 12345
 node-devtools-cli debug connect --process-name "server.js"
 
 # By Docker container
-node-devtools-cli debug connect --container-name my-app --port 9229
+node-devtools-cli debug connect --container-name my-app --inspector-port 9229
+node-devtools-cli debug connect --container-id <id> --host host.docker.internal --inspector-port 9229
 
 # By inspector port (already --inspect)
-node-devtools-cli debug connect --port 9229
+node-devtools-cli debug connect --inspector-port 9229
 
 # Direct WebSocket URL
 node-devtools-cli debug connect --ws-url "ws://127.0.0.1:9229/abc-123"
@@ -53,13 +58,15 @@ node-devtools-cli debug put-tracepoint \
   --line-number 15 \
   --condition "req.user.id === 1"
 
-# List / Remove / Clear
-node-devtools-cli debug list-tracepoints
-node-devtools-cli debug remove-tracepoint --id "tp_abc123"
-node-devtools-cli debug clear-tracepoints
+# List / Remove / Clear (unified)
+node-devtools-cli debug list-probes --types tracepoint
+node-devtools-cli debug remove-probe --type tracepoint --id "tp_abc123"
+node-devtools-cli debug clear-probes --types tracepoint
 ```
 
 ## Logpoints
+
+Optional: `--column-number`, `--condition`, `--hit-condition` (same semantics as tracepoint).
 
 ```bash
 node-devtools-cli debug put-logpoint \
@@ -67,9 +74,15 @@ node-devtools-cli debug put-logpoint \
   --line-number 10 \
   --log-expression "`Processing: ${item}`"
 
-node-devtools-cli debug list-logpoints
-node-devtools-cli debug remove-logpoint --id "lp_xyz"
-node-devtools-cli debug clear-logpoints
+# With condition / hit condition
+node-devtools-cli debug put-logpoint \
+  --url-pattern "utils.ts" --line-number 10 --log-expression "item" \
+  --condition "item.active" --hit-condition "> 5"
+
+# List / Remove / Clear (unified)
+node-devtools-cli debug list-probes --types logpoint
+node-devtools-cli debug remove-probe --type logpoint --id "lp_xyz"
+node-devtools-cli debug clear-probes --types logpoint
 ```
 
 ## Exceptionpoints
@@ -80,22 +93,18 @@ node-devtools-cli debug put-exceptionpoint --state all
 node-devtools-cli debug put-exceptionpoint --state none
 ```
 
-## Snapshots
+## Snapshots (unified)
 
 ```bash
-# Tracepoint
-node-devtools-cli --json debug get-tracepoint-snapshots
-node-devtools-cli --json debug get-tracepoint-snapshots --probe-id "tp_123"
-node-devtools-cli --json debug get-tracepoint-snapshots --from-sequence 50
-node-devtools-cli debug clear-tracepoint-snapshots
+# Get all or by type
+node-devtools-cli --json debug get-probe-snapshots
+node-devtools-cli --json debug get-probe-snapshots --types tracepoint,logpoint,exceptionpoint
+node-devtools-cli --json debug get-probe-snapshots --probe-id "tp_123"
+node-devtools-cli --json debug get-probe-snapshots --from-sequence 50 --limit 20
 
-# Logpoint
-node-devtools-cli --json debug get-logpoint-snapshots
-node-devtools-cli debug clear-logpoint-snapshots
-
-# Exceptionpoint
-node-devtools-cli --json debug get-exceptionpoint-snapshots
-node-devtools-cli debug clear-exceptionpoint-snapshots
+# Clear snapshots
+node-devtools-cli debug clear-probe-snapshots
+node-devtools-cli debug clear-probe-snapshots --types tracepoint --probe-id "tp_123"
 ```
 
 ## Watch Expressions
@@ -103,25 +112,35 @@ node-devtools-cli debug clear-exceptionpoint-snapshots
 ```bash
 node-devtools-cli debug add-watch --expression "req.body"
 node-devtools-cli debug add-watch --expression "this.state"
-node-devtools-cli debug list-watches
-node-devtools-cli debug remove-watch --id "w_abc"
-node-devtools-cli debug clear-watches
+
+# List / Remove / Clear (unified)
+node-devtools-cli debug list-probes --types watch
+node-devtools-cli debug remove-probe --type watch --id "w_abc"
+node-devtools-cli debug clear-probes --types watches
 ```
 
 ## Resolve Source Location
 
-For source map resolution (generated → original source):
+For source map resolution (generated → original source). Input: generated script URL, line, optional column (1-based).
 
 ```bash
 node-devtools-cli debug resolve-source-location \
   --url "file:///path/to/dist/app.js" \
   --line 100
+
+# With column
+node-devtools-cli debug resolve-source-location --url "file:///dist/app.js" --line 100 --column 5
 ```
 
-## Console Logs
+## Console Logs (get-logs)
+
+Same filtering as browser `o11y get-console-messages`: single `type` (level or higher), `search`, optional `timestamp`, `sequenceNumber`, `limit` (count + from).
 
 ```bash
 node-devtools-cli --json debug get-logs
 node-devtools-cli --json debug get-logs --search "error"
 node-devtools-cli --json debug get-logs --type error
+node-devtools-cli --json debug get-logs --type warning
 ```
+
+**Optional:** `--timestamp`, `--sequence-number`, `--limit` (JSON object: `{"count":100,"from":"end"}`; count 0 = no limit). `--type` values: `all`, `debug`, `info`, `warning`, `error` (filter by this level or higher).

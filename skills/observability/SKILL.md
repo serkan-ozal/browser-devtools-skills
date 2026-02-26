@@ -29,14 +29,14 @@ browser-devtools-cli o11y set-trace-id --trace-id "abc123def456..."
 ### Console Monitoring
 ```bash
 browser-devtools-cli o11y get-console-messages
-browser-devtools-cli --json o11y get-console-messages --types error,warn
+browser-devtools-cli --json o11y get-console-messages --type warning
 browser-devtools-cli --json o11y get-console-messages --search "error"
 ```
 
 ### Network Observability
 ```bash
 browser-devtools-cli --json o11y get-http-requests
-browser-devtools-cli --json o11y get-http-requests --resource-type fetch,xhr
+browser-devtools-cli --json o11y get-http-requests --resource-type fetch
 browser-devtools-cli --json o11y get-http-requests --status-min 400
 ```
 
@@ -114,7 +114,7 @@ browser-devtools-cli $SESSION sync wait-for-network-idle
 browser-devtools-cli $SESSION o11y get-trace-id
 
 # 5. Check console errors
-browser-devtools-cli $SESSION --json o11y get-console-messages --types error
+browser-devtools-cli $SESSION --json o11y get-console-messages --type error
 
 # 6. Check network requests
 browser-devtools-cli $SESSION --json o11y get-http-requests

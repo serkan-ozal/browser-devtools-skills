@@ -31,7 +31,8 @@ browser-devtools-cli --json o11y get-web-vitals --include-debug
 ### Network Performance
 ```bash
 browser-devtools-cli --json o11y get-http-requests
-browser-devtools-cli --json o11y get-http-requests --resource-type script,stylesheet
+browser-devtools-cli --json o11y get-http-requests --resource-type script
+browser-devtools-cli --json o11y get-http-requests --resource-type stylesheet
 browser-devtools-cli --json o11y get-http-requests --status-min 400
 ```
 
@@ -75,7 +76,7 @@ browser-devtools-cli $SESSION --json o11y get-web-vitals --wait-ms 2000
 browser-devtools-cli $SESSION --json o11y get-http-requests
 
 # 5. Check for console errors
-browser-devtools-cli $SESSION --json o11y get-console-messages --types error,warn
+browser-devtools-cli $SESSION --json o11y get-console-messages --type warning
 
 # 6. Take screenshot for reference
 browser-devtools-cli $SESSION content take-screenshot --name "performance-audit"
@@ -88,7 +89,10 @@ browser-devtools-cli session delete perf-audit
 
 ### Check Large Resources
 ```bash
-browser-devtools-cli --json o11y get-http-requests --resource-type image,script,stylesheet
+# Filter by type (one at a time: document, stylesheet, image, script, xhr, fetch, etc.)
+browser-devtools-cli --json o11y get-http-requests --resource-type script
+browser-devtools-cli --json o11y get-http-requests --resource-type stylesheet
+browser-devtools-cli --json o11y get-http-requests --resource-type image
 ```
 
 ### Check Slow Requests

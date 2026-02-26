@@ -14,8 +14,10 @@ browser-devtools-cli sync wait-for-network-idle [options]
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--timeout` | number | No | `30000` | Max wait time in ms |
-| `--idle-time` | number | No | `500` | Time with no network activity to consider idle (ms) |
+| `--timeout-ms` | number | No | `30000` | Max wait time in ms |
+| `--idle-time-ms` | number | No | `500` | Network must stay idle for this many ms |
+| `--max-connections` | number | No | `0` | Consider idle when in-flight requests ≤ this |
+| `--poll-interval-ms` | number | No | `50` | Polling interval in ms |
 
 **Description:**
 
@@ -31,13 +33,13 @@ Waits until there are no network connections for the specified idle time. Useful
 browser-devtools-cli sync wait-for-network-idle
 
 # Shorter idle time for faster tests
-browser-devtools-cli sync wait-for-network-idle --idle-time 200
+browser-devtools-cli sync wait-for-network-idle --idle-time-ms 200
 
 # Longer timeout for slow pages
-browser-devtools-cli sync wait-for-network-idle --timeout 60000
+browser-devtools-cli sync wait-for-network-idle --timeout-ms 60000
 
 # Stricter idle requirement
-browser-devtools-cli sync wait-for-network-idle --idle-time 1000
+browser-devtools-cli sync wait-for-network-idle --idle-time-ms 1000
 
 # JSON output
 browser-devtools-cli --json sync wait-for-network-idle
@@ -47,8 +49,13 @@ browser-devtools-cli --json sync wait-for-network-idle
 
 ```json
 {
-  "waited": true,
-  "durationMs": 1234
+  "waitedMs": 1234,
+  "idleTimeMs": 500,
+  "timeoutMs": 30000,
+  "maxConnections": 0,
+  "pollIntervalMs": 50,
+  "finalInFlightRequests": 0,
+  "observedIdleMs": 500
 }
 ```
 
@@ -95,7 +102,7 @@ browser-devtools-cli $SESSION interaction click --selector "button[type=submit]"
 browser-devtools-cli $SESSION sync wait-for-network-idle
 
 # Check redirect URL
-browser-devtools-cli $SESSION run js-in-browser --code "window.location.href"
+browser-devtools-cli $SESSION run js-in-browser --script "window.location.href"
 ```
 
 ## Infinite Scroll Workflow
@@ -108,13 +115,13 @@ browser-devtools-cli $SESSION navigation go-to --url "https://example.com/feed"
 browser-devtools-cli $SESSION sync wait-for-network-idle
 
 # Scroll down to trigger load
-browser-devtools-cli $SESSION interaction scroll --direction down --amount 1000
+browser-devtools-cli $SESSION interaction scroll --mode by --dy 1000
 
 # Wait for new content
-browser-devtools-cli $SESSION sync wait-for-network-idle --idle-time 200
+browser-devtools-cli $SESSION sync wait-for-network-idle --idle-time-ms 200
 
 # Get loaded items count
-browser-devtools-cli $SESSION run js-in-browser --code "document.querySelectorAll('.feed-item').length"
+browser-devtools-cli $SESSION run js-in-browser --script "document.querySelectorAll('.feed-item').length"
 ```
 
 ## Best Practices

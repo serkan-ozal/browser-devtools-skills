@@ -32,7 +32,7 @@ node-devtools-cli --session-id my-debug debug put-tracepoint \
 
 # 4. Trigger the code path (e.g., make API request to your app)
 # 5. Get captured snapshots
-node-devtools-cli --session-id my-debug --json debug get-tracepoint-snapshots
+node-devtools-cli --session-id my-debug --json debug get-probe-snapshots
 ```
 
 ## Global Options
@@ -57,7 +57,7 @@ node-devtools-cli --json --quiet --session-id "debug-session" <command>
 | Domain | Description | Reference |
 |--------|-------------|-----------|
 | [debug](./references/debug.md) | Connection, tracepoints, logpoints, exceptionpoints, watch, snapshots |
-| run | JavaScript execution in connected Node process |
+| [run](./references/run.md) | JavaScript execution in connected Node process |
 
 ## Connection Methods
 
@@ -68,7 +68,7 @@ Connect via `debug connect` with one of:
 | PID | `--pid <number>` | `--pid 12345` |
 | Process name | `--process-name <pattern>` | `--process-name "server.js"` |
 | Docker container | `--container-id` or `--container-name` | `--container-name my-api` |
-| Inspector port | `--port <number>` | `--port 9229` |
+| Inspector port | `--inspector-port <number>` | `--inspector-port 9229` |
 | WebSocket URL | `--ws-url <url>` | `--ws-url "ws://127.0.0.1:9229/abc"` |
 
 If the process doesn't have `--inspect` active, the CLI activates it via SIGUSR1 (no code changes). For Docker: expose port 9229 and use `--inspect=0.0.0.0:9229`.
@@ -125,7 +125,7 @@ node-devtools-cli $SESSION debug put-tracepoint \
 
 # Trigger: curl http://localhost:3000/api/users
 # Get snapshots
-node-devtools-cli $SESSION --json debug get-tracepoint-snapshots
+node-devtools-cli $SESSION --json debug get-probe-snapshots
 ```
 
 ### Connect by Process Name
@@ -141,7 +141,7 @@ node-devtools-cli debug connect --process-name "api"
 node-devtools-cli debug connect \
   --container-name my-node-app \
   --host host.docker.internal \
-  --port 9229
+  --inspector-port 9229
 ```
 
 ### Exception Catching
@@ -154,7 +154,7 @@ node-devtools-cli $SESSION debug put-exceptionpoint --state uncaught
 
 # Trigger error in app
 # Check snapshots
-node-devtools-cli $SESSION --json debug get-exceptionpoint-snapshots
+node-devtools-cli $SESSION --json debug get-probe-snapshots --types exceptionpoint
 ```
 
 ### Run JS in Node Process

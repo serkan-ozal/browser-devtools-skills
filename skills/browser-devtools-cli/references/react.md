@@ -21,7 +21,12 @@ browser-devtools-cli react get-component-for-element --selector <selector>
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--selector` | string | Yes | - | CSS selector for DOM element |
+| `--selector` | string | No | - | CSS selector for DOM element (or use --x/--y for viewport coords) |
+| `--x` | number | No | - | Viewport X when selector omitted |
+| `--y` | number | No | - | Viewport Y when selector omitted |
+| `--max-stack-depth` | number | No | 30 | Max component stack depth |
+| `--include-props-preview` | boolean | No | true | Include props preview in output |
+| `--max-props-preview-chars` | number | No | 2000 | Max chars for props preview |
 
 **Description:**
 
@@ -70,30 +75,40 @@ browser-devtools-cli --json react get-component-for-element --selector "form#log
 Find DOM elements rendered by a React component.
 
 ```bash
-browser-devtools-cli react get-element-for-component --component <name>
+browser-devtools-cli react get-element-for-component --component-name <name>
 ```
 
 **Arguments:**
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `--component` | string | Yes | - | Component name to search for |
+| `--component-name` | string | No | - | Component name to search for (use with anchor for best match) |
+| `--anchor-selector` | string | No | - | Anchor element selector/ref to target instance |
+| `--anchor-x` | number | No | - | Viewport X when anchor-selector omitted |
+| `--anchor-y` | number | No | - | Viewport Y when anchor-selector omitted |
+| `--match-strategy` | enum | No | `exact` | `exact` or `contains` for component name |
+| `--file-name-hint` | string | No | - | Source file hint for disambiguation |
+| `--line-number` | number | No | - | Line hint for disambiguation |
+| `--max-elements` | number | No | 25 | Max DOM elements to return |
+| `--only-visible` | boolean | No | true | Only include visible elements |
+| `--only-in-viewport` | boolean | No | false | Only include elements in viewport |
+| `--max-matches` | number | No | 10 | Max component instances to consider |
 
 **Description:**
 
-Searches the React component tree and returns DOM elements rendered by matching components.
+Searches the React component tree and returns DOM elements rendered by matching components. Prefer anchor (selector or x,y) plus component name for reliable instance targeting.
 
 **Examples:**
 
 ```bash
 # Find elements rendered by Button component
-browser-devtools-cli react get-element-for-component --component "Button"
+browser-devtools-cli react get-element-for-component --component-name "Button"
 
 # Find elements by component name (JSON for parsing)
-browser-devtools-cli --json react get-element-for-component --component "UserCard"
+browser-devtools-cli --json react get-element-for-component --component-name "UserCard"
 
 # Find specific component instance
-browser-devtools-cli --json react get-element-for-component --component "Header"
+browser-devtools-cli --json react get-element-for-component --component-name "Header"
 ```
 
 **Output (JSON):**
@@ -146,7 +161,7 @@ browser-devtools-cli $SESSION sync wait-for-network-idle
 browser-devtools-cli $SESSION react get-component-for-element --selector "[data-testid='user-profile']"
 
 # Find where a component renders
-browser-devtools-cli $SESSION react get-element-for-component --component "ErrorBoundary"
+browser-devtools-cli $SESSION react get-element-for-component --component-name "ErrorBoundary"
 
 # Screenshot component
 browser-devtools-cli $SESSION content take-screenshot --selector "[data-testid='user-profile']" --name "user-profile"
@@ -175,7 +190,7 @@ SESSION="--session-id find-all --persistent --json"
 browser-devtools-cli $SESSION navigation go-to --url "http://localhost:3000"
 
 # Find all Button instances
-BUTTONS=$(browser-devtools-cli $SESSION react get-element-for-component --component "Button")
+BUTTONS=$(browser-devtools-cli $SESSION react get-element-for-component --component-name "Button")
 echo "Found buttons: $BUTTONS"
 
 # Count instances

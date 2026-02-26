@@ -116,7 +116,7 @@ browser-devtools-cli $SESSION a11y take-aria-snapshot --selector ".card"
 SESSION="--session-id react-debug"
 
 # Check for React errors in console
-browser-devtools-cli $SESSION --json o11y get-console-messages --types error,warn
+browser-devtools-cli $SESSION --json o11y get-console-messages --type warning
 
 # Look for component info
 browser-devtools-cli $SESSION --json react get-component-for-element --selector ".error-boundary"

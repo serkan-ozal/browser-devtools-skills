@@ -24,8 +24,8 @@ This skill activates when:
 ### Navigation
 ```bash
 browser-devtools-cli navigation go-to --url "https://example.com"
-browser-devtools-cli navigation go-back
-browser-devtools-cli navigation go-forward
+browser-devtools-cli navigation go-back-or-forward --direction back
+browser-devtools-cli navigation go-back-or-forward --direction forward
 browser-devtools-cli navigation reload
 ```
 
@@ -61,7 +61,7 @@ browser-devtools-cli sync wait-for-network-idle
 browser-devtools-cli stub mock-http-response --pattern "**/api/**" --response '{"status":200}'
 browser-devtools-cli stub intercept-http-request --pattern "**/api/**" --modifications '{"headers":{}}'
 browser-devtools-cli stub list
-browser-devtools-cli stub clear --all
+browser-devtools-cli stub clear
 ```
 
 ### Code Execution

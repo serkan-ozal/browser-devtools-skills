@@ -36,7 +36,7 @@ browser-devtools-cli stub intercept-http-request \
 ### Network Monitoring
 ```bash
 browser-devtools-cli --json o11y get-http-requests
-browser-devtools-cli --json o11y get-http-requests --resource-type fetch,xhr
+browser-devtools-cli --json o11y get-http-requests --resource-type fetch
 browser-devtools-cli --json o11y get-http-requests --status-min 400
 ```
 
@@ -44,7 +44,7 @@ browser-devtools-cli --json o11y get-http-requests --status-min 400
 ```bash
 browser-devtools-cli stub list
 browser-devtools-cli stub clear --stub-id <id>
-browser-devtools-cli stub clear --all
+browser-devtools-cli stub clear
 ```
 
 ## Common Scenarios
@@ -150,7 +150,7 @@ browser-devtools-cli $SESSION content get-as-text --selector ".user-list"
 browser-devtools-cli $SESSION stub list
 
 # 7. Clear all stubs
-browser-devtools-cli $SESSION stub clear --all
+browser-devtools-cli $SESSION stub clear
 
 # 8. Cleanup
 browser-devtools-cli session delete api-test
@@ -176,7 +176,7 @@ browser-devtools-cli $SESSION content take-screenshot --name "error-state"
 browser-devtools-cli $SESSION content get-as-text --selector ".error-message"
 
 # Cleanup
-browser-devtools-cli $SESSION stub clear --all
+browser-devtools-cli $SESSION stub clear
 browser-devtools-cli session delete error-test
 ```
 
@@ -194,7 +194,7 @@ node-devtools-cli --session-id api-debug debug put-tracepoint \
   --line-number 42
 
 # Trigger the API from browser (or curl), then get snapshots
-node-devtools-cli --session-id api-debug --json debug get-tracepoint-snapshots
+node-devtools-cli --session-id api-debug --json debug get-probe-snapshots
 
 # Or inspect backend console logs
 node-devtools-cli --session-id api-debug --json debug get-logs --search "error"
