@@ -37,7 +37,7 @@ browser-devtools-cli --json o11y get-console-messages --search "error"
 ```bash
 browser-devtools-cli --json o11y get-http-requests
 browser-devtools-cli --json o11y get-http-requests --resource-type fetch
-browser-devtools-cli --json o11y get-http-requests --status-min 400
+browser-devtools-cli --json o11y get-http-requests --status '{"min":400}'
 ```
 
 ### Performance Metrics

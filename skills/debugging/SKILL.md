@@ -32,14 +32,7 @@ browser-devtools-cli --json o11y get-console-messages --type error
 ```bash
 browser-devtools-cli o11y get-http-requests
 browser-devtools-cli --json o11y get-http-requests --resource-type fetch
-browser-devtools-cli --json o11y get-http-requests --status-min 400
-```
-
-### JavaScript Execution
-```bash
-browser-devtools-cli run js-in-browser --script "document.title"
-browser-devtools-cli run js-in-browser --script "localStorage.getItem('token')"
-browser-devtools-cli run js-in-sandbox --code "return await page.evaluate(() => window.myVar)"
+browser-devtools-cli --json o11y get-http-requests --status '{"min":400}'
 ```
 
 ### Tracepoints (Non-Blocking)
@@ -103,14 +96,11 @@ node-devtools-cli --session-id backend-debug debug put-exceptionpoint --state un
 node-devtools-cli --session-id backend-debug --json debug get-logs
 node-devtools-cli --session-id backend-debug --json debug get-logs --search "error"
 
-# 5. Run JavaScript in the connected process
-node-devtools-cli --session-id backend-debug run js-in-node --script "process.memoryUsage()"
-
-# 6. Retrieve snapshots (after triggering the code path)
+# 5. Retrieve snapshots (after triggering the code path)
 node-devtools-cli --session-id backend-debug --json debug get-probe-snapshots
 node-devtools-cli --session-id backend-debug --json debug get-probe-snapshots --types tracepoint,exceptionpoint
 
-# 7. Status and cleanup
+# 6. Status and cleanup
 node-devtools-cli --session-id backend-debug debug status
 node-devtools-cli debug disconnect
 ```
@@ -137,7 +127,7 @@ browser-devtools-cli content get-as-html --selector ".error-container"
 browser-devtools-cli navigation go-to --url "https://example.com"
 browser-devtools-cli content take-screenshot --name "initial"
 browser-devtools-cli --json o11y get-console-messages --type warning
-browser-devtools-cli --json o11y get-http-requests --status-min 400
+browser-devtools-cli --json o11y get-http-requests --status '{"min":400}'
 ```
 
 ## Advanced Debugging Workflow (Non-Blocking)

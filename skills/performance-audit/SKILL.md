@@ -33,19 +33,13 @@ browser-devtools-cli --json o11y get-web-vitals --include-debug
 browser-devtools-cli --json o11y get-http-requests
 browser-devtools-cli --json o11y get-http-requests --resource-type script
 browser-devtools-cli --json o11y get-http-requests --resource-type stylesheet
-browser-devtools-cli --json o11y get-http-requests --status-min 400
+browser-devtools-cli --json o11y get-http-requests --status '{"min":400}'
 ```
 
 ### Visual Analysis
 ```bash
 browser-devtools-cli content take-screenshot --name "above-fold"
 browser-devtools-cli content take-screenshot --name "full-page" --full-page
-```
-
-### JavaScript Execution Analysis
-```bash
-browser-devtools-cli run js-in-browser --script "performance.getEntriesByType('longtask')"
-browser-devtools-cli run js-in-browser --script "performance.getEntriesByType('resource')"
 ```
 
 ## Performance Thresholds
@@ -101,23 +95,6 @@ browser-devtools-cli --json o11y get-http-requests
 # Look for requests with high timing values
 ```
 
-### Check Render-Blocking Resources
-```bash
-browser-devtools-cli run js-in-browser --script "
-  performance.getEntriesByType('resource')
-    .filter(r => r.renderBlockingStatus === 'blocking')
-    .map(r => ({name: r.name, duration: r.duration}))
-"
-```
-
-### Check Long Tasks
-```bash
-browser-devtools-cli run js-in-browser --script "
-  performance.getEntriesByType('longtask')
-    .map(t => ({startTime: t.startTime, duration: t.duration}))
-"
-```
-
 ## Backend Performance (node-devtools-cli)
 
 When TTFB or API latency suggests backend bottlenecks, inspect the Node.js process:
@@ -125,10 +102,6 @@ When TTFB or API latency suggests backend bottlenecks, inspect the Node.js proce
 ```bash
 # Connect to API/server process
 node-devtools-cli --session-id perf debug connect --pid 12345
-
-# Check memory and CPU
-node-devtools-cli --session-id perf run js-in-node --script "process.memoryUsage()"
-node-devtools-cli --session-id perf run js-in-node --script "require('os').loadavg()"
 
 # Tracepoint on slow handler to capture call context
 node-devtools-cli --session-id perf debug put-tracepoint \

@@ -16,6 +16,8 @@ browser-devtools-cli interaction click --selector <selector-or-ref>
 |----------|------|----------|---------|-------------|
 | `--selector` | string | Yes | - | CSS selector or ref (e1, @e1) for element to click |
 | `--timeout-ms` | number | No | 10000 | Timeout when waiting for element |
+| `--wait-for-navigation` | boolean | No | `false` | When true, wait for navigation and network idle after click (use when click opens a new page) |
+| `--wait-for-timeout-ms` | number | No | 30000 | Timeout for navigation and network idle when wait-for-navigation is true |
 
 **Examples:**
 

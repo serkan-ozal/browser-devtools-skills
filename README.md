@@ -26,15 +26,14 @@ npx skills add serkan-ozal/browser-devtools-skills
 - [a11y](skills/browser-devtools-cli/references/a11y.md) - Accessibility snapshots (ARIA, AX tree)
 - [o11y](skills/browser-devtools-cli/references/o11y.md) - Observability (Web Vitals, console, HTTP, traces)
 - [debug](skills/browser-devtools-cli/references/debug.md) - Non-blocking debugging (tracepoints, logpoints, exceptions)
-- [run](skills/browser-devtools-cli/references/run.md) - JavaScript execution (browser, sandbox)
 - [stub](skills/browser-devtools-cli/references/stub.md) - HTTP mocking (intercept, mock, clear)
 - [sync](skills/browser-devtools-cli/references/sync.md) - Synchronization (wait for network idle)
 - [react](skills/browser-devtools-cli/references/react.md) - React DevTools integration
 - [figma](skills/browser-devtools-cli/references/figma.md) - Figma design comparison
+- [execute](skills/browser-devtools-cli/references/execute.md) - Batch JavaScript execution (run execute; CLI and MCP)
 
 **node-devtools-cli References:**
 - [debug](skills/node-devtools-cli/references/debug.md) - Connection, tracepoints, logpoints, exceptionpoints, snapshots
-- [run](skills/node-devtools-cli/references/run.md) - JavaScript execution in connected Node process
 
 ### Task-Specific Skills
 

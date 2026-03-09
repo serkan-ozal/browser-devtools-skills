@@ -1,6 +1,6 @@
 ---
 name: node-devtools-cli
-description: CLI for debugging Node.js backend processes with non-blocking inspection. Use when the user needs to connect to Node.js processes (by PID, name, Docker, or port), set tracepoints/logpoints/exceptionpoints, capture call stacks and local variables, run JavaScript in the process context, or inspect console logs. Requires daemon; connect before other debug commands.
+description: CLI for debugging Node.js backend processes with non-blocking inspection. Use when the user needs to connect to Node.js processes (by PID, name, Docker, or port), set tracepoints/logpoints/exceptionpoints, capture call stacks and local variables, or inspect console logs. Requires daemon; connect before other debug commands.
 allowed-tools: Bash(node-devtools-cli:*)
 ---
 
@@ -57,7 +57,6 @@ node-devtools-cli --json --quiet --session-id "debug-session" <command>
 | Domain | Description | Reference |
 |--------|-------------|-----------|
 | [debug](./references/debug.md) | Connection, tracepoints, logpoints, exceptionpoints, watch, snapshots |
-| [run](./references/run.md) | JavaScript execution in connected Node process |
 
 ## Connection Methods
 
@@ -155,14 +154,6 @@ node-devtools-cli $SESSION debug put-exceptionpoint --state uncaught
 # Trigger error in app
 # Check snapshots
 node-devtools-cli $SESSION --json debug get-probe-snapshots --types exceptionpoint
-```
-
-### Run JS in Node Process
-
-```bash
-# After connect
-node-devtools-cli run js-in-node --script "process.memoryUsage()"
-node-devtools-cli run js-in-node --script "require('os').loadavg()"
 ```
 
 ## Interactive Mode

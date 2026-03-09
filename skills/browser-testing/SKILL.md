@@ -64,12 +64,6 @@ browser-devtools-cli stub list
 browser-devtools-cli stub clear
 ```
 
-### Code Execution
-```bash
-browser-devtools-cli run js-in-browser --script "document.title"
-browser-devtools-cli run js-in-sandbox --code "return await page.title()"
-```
-
 ## Basic Testing Workflow
 
 1. **Navigate**: Go to the page under test
@@ -194,3 +188,4 @@ browser-devtools-cli session delete my-test
 6. **Clear fields** before filling (use `interaction fill` which clears first)
 7. **Handle dynamic fields** with wait strategies
 8. **Screenshot after errors** for documentation
+9. **Batch steps when useful**: For long flows, `run execute --code "..."` with `callTool()` reduces round-trips (see browser-devtools-cli execute reference).

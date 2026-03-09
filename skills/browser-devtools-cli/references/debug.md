@@ -75,6 +75,9 @@ browser-devtools-cli --json debug get-probe-snapshots --from-sequence 50
 # Limit results
 browser-devtools-cli --json debug get-probe-snapshots --limit 10
 
+# Output trimming (tracepoint/exceptionpoint): --max-call-stack-depth, --include-scopes (JSON array, e.g. ["local","closure"]), --max-variables-per-scope (defaults keep payload small)
+browser-devtools-cli --json debug get-probe-snapshots --max-call-stack-depth 20 --include-scopes '["local","closure"]' --max-variables-per-scope 50
+
 # Clear snapshots (optional types and probeId)
 browser-devtools-cli debug clear-probe-snapshots
 browser-devtools-cli debug clear-probe-snapshots --types tracepoint,exceptionpoint

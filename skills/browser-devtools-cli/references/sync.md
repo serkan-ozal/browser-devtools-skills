@@ -101,8 +101,8 @@ browser-devtools-cli $SESSION interaction click --selector "button[type=submit]"
 # Wait for API response
 browser-devtools-cli $SESSION sync wait-for-network-idle
 
-# Check redirect URL
-browser-devtools-cli $SESSION run js-in-browser --script "window.location.href"
+# Check redirect URL (e.g. content get-as-text or a11y snapshot)
+browser-devtools-cli $SESSION content get-as-text
 ```
 
 ## Infinite Scroll Workflow
@@ -120,8 +120,8 @@ browser-devtools-cli $SESSION interaction scroll --mode by --dy 1000
 # Wait for new content
 browser-devtools-cli $SESSION sync wait-for-network-idle --idle-time-ms 200
 
-# Get loaded items count
-browser-devtools-cli $SESSION run js-in-browser --script "document.querySelectorAll('.feed-item').length"
+# Verify content (e.g. take screenshot or get-as-text)
+browser-devtools-cli $SESSION content take-screenshot --name "feed"
 ```
 
 ## Best Practices
@@ -142,26 +142,10 @@ browser-devtools-cli $SESSION run js-in-browser --script "document.querySelector
    - Increase for slow networks or heavy pages
    - Consider test timeout budgets
 
-4. **Combine with JavaScript waits when needed:**
-
-```bash
-# Wait for network
-browser-devtools-cli sync wait-for-network-idle
-
-# Additional wait for animations
-browser-devtools-cli run js-in-sandbox --code "await page.waitForTimeout(500)"
-```
+4. **Combine with sync and timeouts:** Use `--timeout-ms` and `--idle-time-ms` to tune for your app.
 
 ## Caveats
 
 - WebSocket connections don't affect network idle detection
 - Long-polling requests may prevent idle state
 - Some SPAs continuously poll - consider using shorter idle times
-- For more precise control, use `run js-in-sandbox` with custom wait logic:
-
-```bash
-# Custom wait with Playwright
-browser-devtools-cli run js-in-sandbox --code "
-  await page.waitForFunction(() => window.appReady === true)
-"
-```

@@ -17,9 +17,12 @@ browser-devtools-cli navigation go-to --url <url> [options]
 | `--url` | string | Yes | - | URL to navigate to (include scheme: `http://`, `https://`) |
 | `--timeout` | number | No | `0` | Max operation time in ms (`0` = no timeout) |
 | `--wait-until` | enum | No | `load` | When to consider navigation complete |
+| `--wait-for-navigation` | boolean | No | `true` | Wait for navigation then network idle before snapshot/screenshot |
+| `--wait-for-timeout-ms` | number | No | `30000` | Timeout for navigation and network idle wait (ms) |
 | `--include-snapshot` | boolean | No | `true` | Return ARIA snapshot with refs after navigation |
-| `--snapshot-interactive-only` | boolean | No | - | Only interactive elements get refs in snapshot |
-| `--snapshot-cursor-interactive` | boolean | No | - | Include cursor:pointer/onclick elements in snapshot refs |
+| `--snapshot-options` | object | No | - | JSON: `{"interactiveOnly":bool,"cursorInteractive":bool}` — snapshot ref options (same as a11y) |
+| `--include-screenshot` | boolean | No | `false` | Take a screenshot after navigation (saved to disk; path in `screenshotFilePath`) |
+| `--screenshot-options` | object | No | - | JSON: `outputPath`, `name`, `fullPage`, `type`, `annotate`, `includeBase64` |
 
 **wait-until values:**
 - `load` - Wait for `load` event
@@ -43,7 +46,7 @@ browser-devtools-cli navigation go-to --url "https://example.com" --wait-until d
 browser-devtools-cli --json navigation go-to --url "https://example.com"
 ```
 
-**Output (JSON):** When `--include-snapshot` is true (default), `output` (ARIA tree text) and `refs` (e1, e2, ...) are also returned.
+**Output (JSON):** When `--include-snapshot` is true (default), `output` (ARIA tree text) and `refs` (e1, e2, ...) are also returned. When `--include-screenshot` is true, `screenshotFilePath` is returned (screenshot saved to disk; use `screenshotOptions.includeBase64` only when the file cannot be read from the path).
 
 ```json
 {
@@ -73,9 +76,12 @@ browser-devtools-cli navigation go-back-or-forward --direction <back|forward> [o
 | `--direction` | enum | Yes | - | `back` or `forward` |
 | `--timeout` | number | No | `0` | Max operation time in ms |
 | `--wait-until` | enum | No | `load` | When to consider navigation complete |
+| `--wait-for-navigation` | boolean | No | `true` | Wait for navigation then network idle before snapshot/screenshot |
+| `--wait-for-timeout-ms` | number | No | `30000` | Timeout for navigation and network idle wait (ms) |
 | `--include-snapshot` | boolean | No | `true` | Return ARIA snapshot with refs after navigation |
-| `--snapshot-interactive-only` | boolean | No | - | Only interactive elements get refs in snapshot |
-| `--snapshot-cursor-interactive` | boolean | No | - | Include cursor:pointer/onclick elements in snapshot refs |
+| `--snapshot-options` | object | No | - | JSON: `{"interactiveOnly":bool,"cursorInteractive":bool}` |
+| `--include-screenshot` | boolean | No | `false` | Take a screenshot after navigation |
+| `--screenshot-options` | object | No | - | JSON: same as go-to |
 
 **Examples:**
 
@@ -101,9 +107,12 @@ browser-devtools-cli navigation reload [options]
 |----------|------|----------|---------|-------------|
 | `--timeout` | number | No | `0` | Max operation time in ms |
 | `--wait-until` | enum | No | `load` | When to consider navigation complete |
+| `--wait-for-navigation` | boolean | No | `true` | Wait for reload then network idle before snapshot/screenshot |
+| `--wait-for-timeout-ms` | number | No | `30000` | Timeout for reload and network idle wait (ms) |
 | `--include-snapshot` | boolean | No | `true` | Return ARIA snapshot with refs after reload |
-| `--snapshot-interactive-only` | boolean | No | - | Only interactive elements get refs |
-| `--snapshot-cursor-interactive` | boolean | No | - | Include cursor:pointer/onclick in refs |
+| `--snapshot-options` | object | No | - | JSON: `{"interactiveOnly":bool,"cursorInteractive":bool}` |
+| `--include-screenshot` | boolean | No | `false` | Take a screenshot after reload |
+| `--screenshot-options` | object | No | - | JSON: same as go-to |
 
 **Examples:**
 

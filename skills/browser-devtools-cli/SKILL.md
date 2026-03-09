@@ -66,11 +66,13 @@ The CLI provides tools organized by domain:
 | [a11y](./references/a11y.md) | Accessibility snapshots (ARIA, AX tree) |
 | [o11y](./references/o11y.md) | Observability (Web Vitals, console, HTTP, traces) |
 | [debug](./references/debug.md) | Non-blocking debugging (tracepoints, logpoints, exceptions) |
-| [run](./references/run.md) | JavaScript execution (browser, sandbox) |
 | [stub](./references/stub.md) | HTTP mocking (intercept, mock, clear) |
 | [sync](./references/sync.md) | Synchronization (wait for network idle) |
 | [react](./references/react.md) | React DevTools integration |
 | [figma](./references/figma.md) | Figma design comparison |
+| [execute](./references/execute.md) | Batch JavaScript execution (run execute; VM has `page`, `callTool`) |
+
+**Execute** is available in both **CLI** and **MCP**. Use it to run JavaScript and batch tool calls: CLI `run execute --code "<js>"` (optionally `--timeout-ms`); MCP tool `execute` with the same params. Inside the VM: **`page`** (browser only) — Playwright Page; use `await page.title()`, `await page.evaluate(...)`, etc. **`callTool(name, input, returnOutput?)`** — invoke any tool; **always `await`**; `name` is underscore form (e.g. `'navigation_go-to'`); `input` is an object (camelCase keys); `returnOutput: true` adds the result to the response `toolOutputs`. See [execute reference](./references/execute.md) for full bindings and args.
 
 ## CLI Management Commands
 
@@ -178,6 +180,16 @@ browser-devtools-cli a11y take-aria-snapshot
 
 # Get detailed AX tree
 browser-devtools-cli --json a11y take-ax-tree-snapshot --roles button,link,textbox
+```
+
+### Batch Execution (execute)
+
+```bash
+# Run JavaScript in session VM (page + callTool available)
+browser-devtools-cli run execute --code "return await page.title();"
+
+# Batch multiple tools in one call (fewer round-trips)
+browser-devtools-cli run execute --code "await callTool('a11y_take-aria-snapshot', {}, true); await callTool('content_take-screenshot', {}, true);"
 ```
 
 ### API Mocking
